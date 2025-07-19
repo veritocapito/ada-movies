@@ -1,49 +1,128 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Divider } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Header = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const activeLinkStyle = {
-    color: '#22d3ee',
-    textDecoration: 'underline',
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
   };
 
+  const navItems = [
+    { text: 'Latest', path: '/latest' },
+    { text: 'Popular', path: '/popular' },
+    { text: 'Search', path: '/search' },
+  ];
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', backgroundColor: '#111827', height: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2 }}>
+        <Typography variant="h6" sx={{ color: '#22d3ee' }}>
+          Menu
+        </Typography>
+        <IconButton sx={{ color: 'white' }}>
+            <CloseIcon />
+        </IconButton>
+      </Box>
+      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.12)' }}/>
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton component={NavLink} to={item.path} sx={{ textAlign: 'center' }}>
+              <ListItemText primary={item.text} sx={{ color: 'white' }} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
-    <header className="bg-gray-800 p-4 shadow-lg flex flex-col sm:flex-row justify-between items-center">
-      <NavLink to="/" className="text-3xl font-bold text-cyan-400 tracking-wider mb-4 sm:mb-0">
-        Ada Movies
-      </NavLink>
+    <>
+      <AppBar component="nav" position="static" sx={{ backgroundColor: '#1f2937' }}>
+        <Toolbar sx={{ maxWidth: '1280px', width: '100%', mx: 'auto' }}>
+          {/* Título */}
+          <Typography
+            variant="h6"
+            component={NavLink}
+            to="/"
+            sx={{ flexGrow: 1, color: '#22d3ee', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.875rem' }}
+          >
+            Ada Movies
+          </Typography>
+
+          {/* Links de navegación para desktop: ocultos en pantallas pequeñas */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
+            {navItems.map((item) => (
+              <Button
+                key={item.text}
+                component={NavLink}
+                to={item.path}
+                sx={{
+                  color: 'white',
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  padding: '8px 16px',
+                  position: 'relative',
+                  '&:after': {
+                    content: '""',
+                    position: 'absolute',
+                    width: '0%',
+                    height: '2px',
+                    bottom: '5px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: '#67e8f9',
+                    transition: 'width 0.3s ease-in-out',
+                  },
+                  '&:hover:after': {
+                    width: '70%',
+                  },
+                  '&.active': {
+                    color: '#67e8f9',
+                  },
+                  '&.active:after': {
+                    width: '70%',
+                  }
+                }}
+              >
+                {item.text}
+              </Button>
+            ))}
+          </Box>
+          
+          {/* Icono de hamburguesa: solo visible en pantallas pequeñas */}
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="end"
+            onClick={handleDrawerToggle}
+            sx={{ display: { md: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
       <nav>
-        <ul className="flex space-x-4 md:space-x-6">
-          <li>
-            <NavLink 
-              to="/latest" 
-              style={({ isActive }) => isActive ? activeLinkStyle : undefined}
-              className="text-gray-300 hover:text-white transition-colors duration-300"
-            >
-              Latest
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="/popular" 
-              style={({ isActive }) => isActive ? activeLinkStyle : undefined}
-              className="text-gray-300 hover:text-white transition-colors duration-300"
-            >
-              Popular
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="/search" 
-              style={({ isActive }) => isActive ? activeLinkStyle : undefined}
-              className="text-gray-300 hover:text-white transition-colors duration-300"
-            >
-              Search
-            </NavLink>
-          </li>
-        </ul>
+        <Drawer
+          anchor="right"
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240, backgroundColor: '#111827' },
+          }}
+        >
+          {drawer}
+        </Drawer>
       </nav>
-    </header>
+    </>
   );
 };
 
