@@ -1,25 +1,26 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
+
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './pages/Home';
 
 function App() {
   return (
-    <div className="bg-gray-900 text-white min-h-screen flex flex-col">
-      <header className="bg-gray-800 p-4 shadow-lg">
-        <h1 className="text-3xl font-bold text-center text-cyan-400 tracking-wider">
-          Ada Movies
-        </h1>
-      </header>
+    <Router>
+      <div className="bg-gray-900 text-white min-h-screen flex flex-col">
+        <Header />
 
-      <main className="p-8 flex-grow">
-        <h2 className="text-2xl font-semibold mb-4">Coming soon...</h2>
-        <p className="text-gray-300">Here I will build my amazing movie application.</p>
-      </main>
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-      <footer className="bg-gray-800 p-4 mt-auto">
-        <p className="text-center text-gray-500">
-          Ada Movies Project &copy; 2025 - VeroDev
-        </p>
-      </footer>
-    </div>
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
