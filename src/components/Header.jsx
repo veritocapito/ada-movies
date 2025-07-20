@@ -43,7 +43,8 @@ const Header = () => {
   return (
     <>
       <AppBar component="nav" position="static" sx={{ backgroundColor: '#1f2937' }}>
-        <Toolbar sx={{ maxWidth: '1280px', width: '100%', mx: 'auto' }}>
+        {/* El Toolbar ahora tiene un ancho máximo y el mismo padding que el main para una alineación perfecta */}
+        <Toolbar sx={{ maxWidth: '1280px', width: '100%', mx: 'auto', px: { xs: 2, sm: 3, lg: 4 } }}>
           {/* Título */}
           <Typography
             variant="h6"
@@ -54,7 +55,7 @@ const Header = () => {
             Ada Movies
           </Typography>
 
-          {/* Links de navegación para desktop: ocultos en pantallas pequeñas */}
+          {/* Links de navegación para desktop */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
             {navItems.map((item) => (
               <Button
@@ -94,7 +95,7 @@ const Header = () => {
             ))}
           </Box>
           
-          {/* Icono de hamburguesa: solo visible en pantallas pequeñas */}
+          {/* Icono de hamburguesa */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
