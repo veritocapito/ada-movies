@@ -1,5 +1,3 @@
-// src/App.jsx
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 
@@ -17,7 +15,7 @@ function App() {
       <div className="bg-gray-900 text-white min-h-screen flex flex-col">
         <Header />
 
-        <main className="flex-grow pt-16"> 
+        <main className="flex-grow pt-16">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/latest" element={<Latest />} />
