@@ -2,27 +2,31 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import MovieList from '../components/MovieList';
-import MovieSlider from '../components/MovieSlider'; 
+import MovieSlider from '../components/MovieSlider';
+import Loader from '../components/Loader';
+import Layout from '../components/Layout';
 
 const Home = () => {
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingLists, setIsLoadingLists] = useState(true); 
 
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchAllMovies = async () => {
       const popularUrl = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US`;
       const topRatedUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US`;
+      const minLoadingTime = new Promise(resolve => setTimeout(resolve, 500)); 
 
       try {
-        const [popularResponse, topRatedResponse] = await Promise.all([
-          axios.get(popularUrl),
-          axios.get(topRatedUrl)
-        ]);
-        
+        const popularResponse = await axios.get(popularUrl);
         setPopularMovies(popularResponse.data.results);
+
+        const [topRatedResponse] = await Promise.all([
+          axios.get(topRatedUrl),
+          minLoadingTime
+        ]);
         setTopRatedMovies(topRatedResponse.data.results);
 
       } catch (error) {
@@ -35,22 +39,30 @@ const Home = () => {
           color: '#ffffff'
         });
       } finally {
-        setIsLoading(false);
+        // Esto hará que el Loader sea reemplazado por las listas de películas
+        setIsLoadingLists(false);
       }
     };
 
-    fetchMovies();
+    fetchAllMovies();
   }, [apiKey]);
-
-  if (isLoading) {
-    return <div className="text-center p-8 text-xl">Loading movies...</div>;
-  }
 
   return (
     <>
+      {/* El slider se renderiza tan pronto como 'popularMovies' tiene datos */}
       <MovieSlider movies={popularMovies.slice(0, 5)} />
-      <MovieList title="Popular Movies" movies={popularMovies.slice(0, 12)} />
-      <MovieList title="Top Rated Movies" movies={topRatedMovies.slice(0, 12)} />
+      
+      <Layout>
+        {/* El Loader ahora solo se muestra si las listas están cargando */}
+        {isLoadingLists ? (
+          <Loader />
+        ) : (
+          <>
+            <MovieList title="Popular Movies" movies={popularMovies.slice(0, 12)} />
+            <MovieList title="Top Rated Movies" movies={topRatedMovies.slice(0, 12)} />
+          </>
+        )}
+      </Layout>
     </>
   );
 };
