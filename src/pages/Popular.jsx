@@ -1,44 +1,14 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import useFetchMovies from '../hooks/useFetchMovies';
 import MovieCard from '../components/MovieCard';
 import Loader from '../components/Loader';
 import Layout from '../components/Layout';
 
 const Popular = () => {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
 
-  useEffect(() => {
-    const fetchPopularMovies = async () => {
-      // El endpoint para películas populares es "popular"
-      const url = `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=1`;
-      const minLoadingTime = new Promise(resolve => setTimeout(resolve, 500));
-
-      try {
-        const [response] = await Promise.all([
-          axios.get(url),
-          minLoadingTime
-        ]);
-        
-        setMovies(response.data.results);
-      } catch (error) {
-        console.error("Error fetching popular movies:", error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Could not fetch the popular movies. Please try again later.',
-          background: '#1f2937',
-          color: '#ffffff'
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPopularMovies();
-  }, [apiKey]);
+  // Llamamos al custom hook useFetchMovies con la URL de las películas populares
+  const { movies, isLoading } = useFetchMovies(url);
 
   if (isLoading) {
     return <Loader />;
