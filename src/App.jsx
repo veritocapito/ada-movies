@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Latest from './pages/Latest';
 import Popular from './pages/Popular';
 import Search from './pages/Search';
+import MovieDetail from './pages/MovieDetail';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/latest" element={<Latest />} />
             <Route path="/popular" element={<Popular />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/movie/:id" element={<MovieDetail />} />
           </Routes>
         </main>
 

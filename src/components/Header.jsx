@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import popcornIconUrl from '../assets/popcorn-icon.png';
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -43,9 +44,15 @@ const Header = () => {
         }}
       >
         <Toolbar sx={{ maxWidth: '1280px', width: '100%', mx: 'auto', px: { xs: 2, sm: 3, lg: 4 } }}>
-          <Typography variant="h6" component={NavLink} to="/" sx={{ flexGrow: 1, color: '#22d3ee', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.875rem' }}>
-            Ada Movies
-          </Typography>
+          <Box component={NavLink} to="/" sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <Typography
+              variant="h6"
+              sx={{ color: '#22d3ee', fontWeight: 'bold', fontSize: '1.875rem' }}
+            >
+              Ada Movies
+            </Typography>
+            <img src={popcornIconUrl} alt="Ada Movies Logo" className="w-9 h-9 ml-3" />
+          </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
             {navItems.map((item) => (
               <Button key={item.text} component={NavLink} to={item.path} sx={{ color: 'white', textTransform: 'none', fontSize: '1rem', padding: '8px 16px', position: 'relative', '&:after': { content: '""', position: 'absolute', width: '0%', height: '2px', bottom: '5px', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#67e8f9', transition: 'width 0.3s ease-in-out', }, '&:hover:after': { width: '70%', }, '&.active': { color: '#67e8f9', }, '&.active:after': { width: '70%', } }}>
