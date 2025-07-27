@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Loader from '../components/Loader';
 import { Box, Typography, Chip, Button, Rating } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
+import { FavoritesContext } from '../context/FavoritesContext';
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 
@@ -15,6 +18,11 @@ const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
+
+  // Contexto de favoritos
+  const { addFavorite, removeFavorite, isFavorite } = useContext(FavoritesContext);
+  
+  const isMovieFavorite = isFavorite(parseInt(id));
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
@@ -40,6 +48,14 @@ const MovieDetail = () => {
 
     fetchMovieDetail();
   }, [id, apiKey]);
+
+  const handleToggleFavorite = () => {
+    if (isMovieFavorite) {
+      removeFavorite(movie.id);
+    } else {
+      addFavorite(movie);
+    }
+  };
 
   if (isLoading) {
     return <Loader />;
@@ -110,12 +126,14 @@ const MovieDetail = () => {
               >
                 Go Back
               </Button>
+              {/* Botón de favoritos dinámico */}
               <Button
                 variant="contained"
-                startIcon={<FavoriteBorderIcon />}
+                startIcon={isMovieFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                onClick={handleToggleFavorite}
                 sx={{ backgroundColor: '#22d3ee', color: 'black', '&:hover': { backgroundColor: '#67e8f9' } }}
               >
-                Add to Favorites
+                {isMovieFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
               </Button>
             </Box>
           </Box>
