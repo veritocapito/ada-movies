@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const useFetchMovies = (url) => {
+const useFetchMovies = (baseUrl, page) => {
 
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
+    const url = `${baseUrl}&page=${page}`;
+
     const fetchData = async () => {
+      setIsLoading(true); // Reset loading state before fetching
       const minLoadingTime = new Promise(resolve => setTimeout(resolve, 700));
 
       try {
@@ -17,6 +21,7 @@ const useFetchMovies = (url) => {
           minLoadingTime
         ]);
         setMovies(response.data.results);
+        setTotalPages(response.data.total_pages);
       } catch (error) {
         console.error("Error fetching data:", error);
         Swal.fire({
@@ -32,9 +37,9 @@ const useFetchMovies = (url) => {
     };
 
     fetchData();
-  }, [url]);
+  }, [baseUrl, page]);
 
-  return { movies, isLoading };
+  return { movies, isLoading, totalPages };
 };
 
 export default useFetchMovies;
