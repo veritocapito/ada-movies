@@ -1,1 +1,24 @@
 @import "tailwindcss";
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.movie-slider-container .slick-dots {
+  bottom: 25px;
+}
+
+.movie-slider-container .slick-dots li button:before {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5); 
+  opacity: 1;
+  transition: color 0.3s ease;
+}
+
+.movie-slider-container .slick-dots li.slick-active button:before {
+  color: #22d3ee; 
+}
