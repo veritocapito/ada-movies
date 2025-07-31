@@ -1,6 +1,6 @@
 # 🎬 Ada Movies
 
-[ada-movies.jpg](https://postimg.cc/hJkDnYYk)
+[![ada-movies.jpg](https://i.postimg.cc/V66dqQWk/ada-movies.jpg)](https://postimg.cc/hJkDnYYk)
 
 **Ada Movies** es una aplicación web moderna y responsiva construida con React, que te permite explorar el vasto mundo del cine. Descubre los últimos lanzamientos, las películas más populares, las mejor valoradas y busca tus títulos favoritos. Esta aplicación fue desarrollada como un proyecto práctico para aplicar conceptos avanzados de React.
 
