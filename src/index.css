@@ -9,7 +9,7 @@ body {
 }
 
 .movie-slider-container .slick-dots {
-  bottom: 25px;
+  bottom: 20px;
 }
 
 .movie-slider-container .slick-dots li button:before {
