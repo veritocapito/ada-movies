@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useFetchMovies = (baseUrl, page) => {
+const useFetchMovies = (url) => {
 
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -9,18 +9,18 @@ const useFetchMovies = (baseUrl, page) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const url = `${baseUrl}&page=${page}`;
+    if (!url) {
+      setIsLoading(false);
+      setMovies([]);
+      return;
+    }
 
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-      const minLoadingTime = new Promise(resolve => setTimeout(resolve, 700));
 
       try {
-        const [response] = await Promise.all([
-          axios.get(url),
-          minLoadingTime
-        ]);
+        const response = await axios.get(url);
         setMovies(response.data.results);
         setTotalPages(response.data.total_pages);
       } catch (error) {
@@ -32,7 +32,7 @@ const useFetchMovies = (baseUrl, page) => {
     };
 
     fetchData();
-  }, [baseUrl, page]);
+  }, [url]);
 
   return { movies, isLoading, totalPages, error };
 };

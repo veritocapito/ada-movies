@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Loader from '../components/Loader';
 import { Box, Typography, Chip, Button, Rating } from '@mui/material';
@@ -11,40 +10,20 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import NotFound from './NotFound';
 
 import { FavoritesContext } from '../context/FavoritesContext';
+import useFetchMovieDetail from '../hooks/useFetchMovieDetail';
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 
 const MovieDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const apiKey = import.meta.env.VITE_TMDB_API_KEY;
-  const [error, setError] = useState(null);
+
+  const { movie, isLoading, error } = useFetchMovieDetail(id);
 
   // Contexto de favoritos
   const { addFavorite, removeFavorite, isFavorite } = useContext(FavoritesContext);
 
-  const isMovieFavorite = isFavorite(parseInt(id));
-
-  useEffect(() => {
-    const fetchMovieDetail = async () => {
-      const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=en-US&append_to_response=videos`;
-      const minLoadingTime = new Promise(resolve => setTimeout(resolve, 700));
-
-      try {
-        const [response] = await Promise.all([axios.get(url), minLoadingTime]);
-        setMovie(response.data);
-      } catch (error) {
-        console.error("Error fetching movie details:", error);
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMovieDetail();
-  }, [id, apiKey]);
+  const isMovieFavorite = id ? isFavorite(parseInt(id)) : false;
 
   const handleToggleFavorite = () => {
     if (isMovieFavorite) {
@@ -140,11 +119,7 @@ const MovieDetail = () => {
     return <Loader />;
   }
 
-  if (error) {
-    return <NotFound />;
-  }
-
-  if (!movie) {
+  if (error || !movie) {
     return <NotFound />;
   }
 
@@ -177,7 +152,7 @@ const MovieDetail = () => {
               src={`${IMAGE_BASE_URL}w500${movie.poster_path}`}
               alt={movie.title}
               className="rounded-lg shadow-lg w-64 mx-auto md:mx-0"
-              onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/500x750/1f2937/ffffff?text=No+Image'; }}
+              onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/500x750/1f2937/ffffff?text=No+Image'; }}
             />
           </Box>
 
