@@ -23,8 +23,8 @@ const Header = () => {
   const handleFavoritesMenuClose = () => setAnchorEl(null);
 
   const navItems = [
-    { text: 'Latest', path: '/latest' },
-    { text: 'Popular', path: '/popular' },
+    { text: 'Latest', path: '/category/latest' },
+    { text: 'Popular', path: '/category/popular' },
     { text: 'Search', path: '/search' },
   ];
   const drawer = (
@@ -63,9 +63,9 @@ const Header = () => {
               variant="h6"
               sx={{ color: '#22d3ee', fontWeight: 'bold', fontSize: '1.875rem' }}
             >
-              Ada Movies
+              My Movies
             </Typography>
-            <img src={popcornIconUrl} alt="Ada Movies Logo" className="w-9 h-9 ml-3" />
+            <img src={popcornIconUrl} alt="My Movies Logo" className="w-9 h-9 ml-3" />
           </Box>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
             {navItems.map((item) => (

@@ -1,28 +1,42 @@
 import { useState } from 'react';
-import useFetchMovies from '../hooks/useFetchMovies'; 
+import { useParams } from 'react-router-dom';
+import useFetchMovies from '../hooks/useFetchMovies';
 import MovieCard from '../components/MovieCard';
 import Loader from '../components/Loader';
 import Layout from '../components/Layout';
 import { Pagination, Box } from '@mui/material';
+import NotFound from './NotFound';
 
-const Latest = () => {
+const CategoryPage = () => {
   const [page, setPage] = useState(1);
+  const { category } = useParams();
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
-  const baseUrl = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=en-US`;
 
-  // Fetch latest movies using the custom hook
-  const { movies, isLoading, totalPages } = useFetchMovies(baseUrl, page);
+  const endpoint = category === 'latest' ? 'now_playing' : category;
+  const baseUrl = `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${apiKey}&language=en-US`;
+
+  // Construct the URL with the current page
+  const { movies, isLoading, totalPages, error } = useFetchMovies(baseUrl, page);
 
   const handlePageChange = (event, value) => {
     setPage(value);
-    // Scroll to top when page changes
     window.scrollTo(0, 0);
   };
 
+  const title = category === 'latest' ? 'Latest Releases' : 'Popular Movies';
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <NotFound />;
+  }
+
   return (
     <Layout>
-      <h2 className="text-3xl font-bold mb-6 text-white">Latest Releases</h2>
-{isLoading ? (
+      <h2 className="text-3xl font-bold mb-6 text-white">{title}</h2>
+      {isLoading ? (
         <Loader />
       ) : (
         <>
@@ -35,7 +49,7 @@ const Latest = () => {
           {/* Pagination Component */}
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
             <Pagination
-              count={totalPages > 500 ? 500 : totalPages} // API limits to 500 pages
+              count={totalPages > 500 ? 500 : totalPages}
               page={page}
               onChange={handlePageChange}
               color="primary"
@@ -53,4 +67,4 @@ const Latest = () => {
   );
 };
 
-export default Latest;
+export default CategoryPage;

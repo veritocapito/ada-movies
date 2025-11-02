@@ -27,8 +27,8 @@ const MovieSlider = ({ movies }) => {
             <Link to={`/movie/${movie.id}`}>
               <Box
                 sx={{
-                  height: { xs: '65vh', sm: '500px' },
-                  maxHeight: '500px',
+                  height: { xs: '80vh', sm: '80svh' },
+                  maxHeight: { xs: '80vh', sm: '80svh' },
                   width: '100%',
                   backgroundImage: `url(${IMAGE_BASE_URL}${movie.backdrop_path})`,
                   backgroundSize: 'cover',
