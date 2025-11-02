@@ -7,7 +7,8 @@ import { Box, Typography, Chip, Button, Rating } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import NotFound from './NotFound';
 
 import { FavoritesContext } from '../context/FavoritesContext';
 
@@ -19,6 +20,7 @@ const MovieDetail = () => {
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
+  const [error, setError] = useState(null);
 
   // Contexto de favoritos
   const { addFavorite, removeFavorite, isFavorite } = useContext(FavoritesContext);
@@ -35,13 +37,7 @@ const MovieDetail = () => {
         setMovie(response.data);
       } catch (error) {
         console.error("Error fetching movie details:", error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Could not fetch the movie details.',
-          background: '#1f2937',
-          color: '#ffffff'
-        });
+        setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -92,7 +88,7 @@ const MovieDetail = () => {
       // 4. Abrimos el modal con el loader centrado
       Swal.fire({
         title: 'Loading Trailer...',
-        html: loaderHtml, 
+        html: loaderHtml,
         background: '#1f2937',
         color: '#ffffff',
         showConfirmButton: false,
@@ -144,8 +140,12 @@ const MovieDetail = () => {
     return <Loader />;
   }
 
+  if (error) {
+    return <NotFound />;
+  }
+
   if (!movie) {
-    return <div className="text-center p-8">Movie not found.</div>;
+    return <NotFound />;
   }
 
   return (
@@ -154,10 +154,10 @@ const MovieDetail = () => {
       <Box
         sx={{
           position: 'relative',
-          height: '50vh',
+          height: '65vh',
           backgroundImage: `url(${IMAGE_BASE_URL}original${movie.backdrop_path})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'center top',
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -177,6 +177,7 @@ const MovieDetail = () => {
               src={`${IMAGE_BASE_URL}w500${movie.poster_path}`}
               alt={movie.title}
               className="rounded-lg shadow-lg w-64 mx-auto md:mx-0"
+              onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/500x750/1f2937/ffffff?text=No+Image'; }}
             />
           </Box>
 

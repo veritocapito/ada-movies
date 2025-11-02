@@ -5,10 +5,10 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 
 import Home from './pages/Home';
-import Latest from './pages/Latest';
-import Popular from './pages/Popular';
+import CategoryPage from './pages/CategoryPage';
 import Search from './pages/Search';
 import MovieDetail from './pages/MovieDetail';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -19,10 +19,10 @@ function App() {
         <main className="flex-grow pt-16">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/latest" element={<Latest />} />
-            <Route path="/popular" element={<Popular />} />
+            <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/search" element={<Search />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
 
