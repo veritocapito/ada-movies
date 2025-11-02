@@ -13,10 +13,10 @@ const CategoryPage = () => {
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
 
   const endpoint = category === 'latest' ? 'now_playing' : category;
-  const baseUrl = `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${apiKey}&language=en-US`;
+  const url = `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${apiKey}&language=en-US&page=${page}`;
 
   // Construct the URL with the current page
-  const { movies, isLoading, totalPages, error } = useFetchMovies(baseUrl, page);
+  const { movies, isLoading, totalPages, error } = useFetchMovies(url);
 
   const handlePageChange = (event, value) => {
     setPage(value);

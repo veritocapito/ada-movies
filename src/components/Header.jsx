@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, Lis
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import popcornIconUrl from '../assets/popcorn-icon.png';
+import popcornIconUrl from '/popcorn-icon.png';
 
 import { FavoritesContext } from '../context/FavoritesContext';
 

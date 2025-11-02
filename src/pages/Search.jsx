@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import useDebounce from '../hooks/useDebounce';
+import useFetchMovies from '../hooks/useFetchMovies';
 import Layout from '../components/Layout';
 import MovieCard from '../components/MovieCard';
 import Loader from '../components/Loader';
@@ -11,12 +11,12 @@ import SearchIcon from '@mui/icons-material/Search';
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get('query') || '');
-  const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isInitialView, setIsInitialView] = useState(searchTerm === '');
+  const [url, setUrl] = useState(null);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const apiKey = import.meta.env.VITE_TMDB_API_KEY;
+
+  const { movies: results, isLoading, error } = useFetchMovies(url);
 
   useEffect(() => {
     if (debouncedSearchTerm) {
@@ -25,40 +25,17 @@ const Search = () => {
       setSearchParams({});
     }
 
-    const performSearch = async () => {
-      // Si el campo de búsqueda está vacío, mostramos sugerencias
-      if (debouncedSearchTerm.trim() === '') {
-        setIsLoading(true);
-        const url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`;
-        try {
-          const response = await axios.get(url);
-          setResults(response.data.results.slice(0, 6));
-          setIsInitialView(true);
-        } catch (error) {
-          console.error("Error fetching suggestions:", error);
-          setResults([]);
-        } finally {
-          setIsLoading(false);
-        }
-        return;
-      }
-
-      setIsLoading(true);
-      setIsInitialView(false);
-      const url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${debouncedSearchTerm}`;
-      try {
-        const response = await axios.get(url);
-        setResults(response.data.results);
-      } catch (error) {
-        console.error("Error searching movies:", error);
-        setResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    performSearch();
+// Si el campo de búsqueda está vacío, mostramos sugerencias (top rated)
+    if (debouncedSearchTerm.trim() === '') {
+      setUrl(`https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`);
+    } else {
+      // Si hay término, buscamos
+      setUrl(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${debouncedSearchTerm}`);
+    }
+    
   }, [debouncedSearchTerm, setSearchParams, apiKey]);
+
+  const isInitialView = !debouncedSearchTerm;
 
   return (
     <Layout>
@@ -97,9 +74,15 @@ const Search = () => {
             </Typography>
           )}
 
-          {!isInitialView && results.length === 0 && debouncedSearchTerm && (
+          {!isInitialView && !error && results.length === 0 && (
              <Typography variant="h6" sx={{ color: 'gray', mt: 4, textAlign: 'center' }}>
               No results found for "{debouncedSearchTerm}".
+            </Typography>
+          )}
+
+          {error && (
+             <Typography variant="h6" sx={{ color: 'red', mt: 4, textAlign: 'center' }}>
+              Oops! Something went wrong while searching.
             </Typography>
           )}
 
