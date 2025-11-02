@@ -1,8 +1,8 @@
-# 🎬 Ada Movies
+# 🎬 My Movies
 
-[![ada-movies.jpg](https://i.postimg.cc/V66dqQWk/ada-movies.jpg)](https://postimg.cc/hJkDnYYk)
+[![my-Movies.png](https://i.postimg.cc/nchTJqPW/my-Movies.png)](https://postimg.cc/F1w0bkmb)
 
-**Ada Movies** es una aplicación web moderna y responsiva construida con React, que te permite explorar el vasto mundo del cine. Descubre los últimos lanzamientos, las películas más populares, las mejor valoradas y busca tus títulos favoritos. Esta aplicación fue desarrollada como un proyecto práctico para aplicar conceptos avanzados de React.
+**My Movies** es una aplicación web moderna y responsiva construida con React, que te permite explorar el vasto mundo del cine. Descubre los últimos lanzamientos, las películas más populares, las mejor valoradas y busca tus títulos favoritos. Esta aplicación fue desarrollada como un proyecto práctico para aplicar conceptos avanzados de React.
 
 ---
 
@@ -76,9 +76,9 @@ Sigue estos pasos para ejecutar el proyecto en tu máquina local.
 
 ## 🌍 Despliegue (Deploy)
 
-Ada Movies está alojado en Vercel.
+My Movies está alojado en Vercel.
 Puedes acceder a la aplicación en vivo desde este enlace:
-[Ada-Movies](https://ada-movies-vc.vercel.app/)
+[My-Movies](https://ada-movies-vc.vercel.app/)
 
 ---
 
